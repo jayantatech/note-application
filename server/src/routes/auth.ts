@@ -3,8 +3,12 @@ import { Request, Response, Router } from "express";
 import jwt from "jsonwebtoken";
 import { verifyToken } from "../middleware";
 import { ExtendedRequest } from "../extended-request";
+import { sanitizeInput } from "../utils/sanitizer";
+import csurf from "csurf";
 
 const router = Router();
+// const csrfProtection = csurf({ cookie: true });
+
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY!;
 const SUPABASE_JWT_SECRET = process.env.SUPABASE_JWT_SECRET!;
@@ -23,27 +27,33 @@ const generateToken = (userId: string, role: string, name: string) => {
 
 router.post("/login", async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    const email = sanitizeInput(req.body.email);
+    const password = sanitizeInput(req.body.password);
+    console.log("email", email, "password", password);
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-    if (error) res.json({ message: "something went wrong", error });
+
+    if (error) {
+      return res.status(500).json({ message: "something went wrong", error });
+    }
 
     const { data: dbData, error: dbError } = await supabase
       .from("Users")
       .select("*")
       .eq("id", data.user?.id);
-    if (dbError) res.json({ message: "something went wrong", dbData });
 
+    if (dbError) {
+      return res.status(500).json({ message: "something went wrong", dbError });
+    }
     // const token = data.session.access_token;
     if (!dbData) throw error;
     const user_Id = data.user?.id;
     const user_role = dbData[0].role;
     const user_name = dbData[0].name;
     const token = generateToken(user_Id!, user_role, user_name);
-    console.log("This si the token", token);
-    res.cookie("token", token, { httpOnly: true, secure: true });
+    // res.cookie("token", token, { httpOnly: true, secure: true });
 
     res.status(200).json({
       token,
@@ -51,27 +61,35 @@ router.post("/login", async (req: Request, res: Response) => {
       message: "user logged in successfully ",
     });
   } catch (error) {
-    res.status(500).json({ message: "login failed", error });
+    if (error) {
+      return res.status(500).json({ message: "something went wrong", error });
+    }
   }
 });
 
 router.post("/signup", async (req: Request, res: Response) => {
   try {
-    const { email, password, role, name } = req.body;
+    const email = sanitizeInput(req.body.email);
+    const password = sanitizeInput(req.body.password);
+    const name = sanitizeInput(req.body.name);
+    const role = sanitizeInput(req.body.role);
     const { data, error } = await supabaseAdmin.auth.admin.createUser({
       email,
       password,
       email_confirm: true,
     });
 
-    if (error) throw error;
-
+    if (error) {
+      return res.status(500).json({ message: "something went wrong", error });
+    }
     if (!data) res.status(201).json({ message: "something is wrong" });
     const { data: dbData, error: dbError } = await supabase
       .from("Users")
       .insert([{ id: data.user?.id, email, role, name }]);
 
-    if (dbError) return res.status(400).send(dbError.message);
+    if (dbError) {
+      return res.status(500).json({ message: "something went wrong", dbError });
+    }
     res
       .status(201)
       .json({ user: data.user, message: "user created successfully" });
@@ -86,12 +104,14 @@ router.post(
   async (req: ExtendedRequest, res: Response) => {
     try {
       const { error } = await supabase.auth.signOut();
-      if (error)
-        res.status(500).json({ message: "Something went wrong", error });
-
+      if (error) {
+        return res.status(500).json({ message: "something went wrong", error });
+      }
       res.status(200).json({ message: "User signed out successfully" });
     } catch (error) {
-      res.status(500).json({ message: "Something went wrong", error });
+      if (error) {
+        return res.status(500).json({ message: "something went wrong", error });
+      }
     }
   }
 );

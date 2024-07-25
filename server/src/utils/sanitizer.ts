@@ -1,5 +1,5 @@
 import xss from "xss";
 
-export const sanitizerInput = (input: string) => {
+export const sanitizeInput = (input: string) => {
   return xss(input);
 };

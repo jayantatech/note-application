@@ -15,6 +15,8 @@ const Login = () => {
     event.preventDefault();
     setError(null);
     try {
+      console.log("The email is", email, "password", password);
+      if (!email || !password) throw new Error("enter your email and password");
       const response = await axios.post(
         "http://localhost:4000/api/auth/login",
         {
@@ -24,6 +26,7 @@ const Login = () => {
       );
 
       const { token } = response.data;
+      console.log("The token is kldkfjkasdfjlsadjfsadf", token);
       Cookies.set("token", token, {
         expires: 1,
         secure: true,

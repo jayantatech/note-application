@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 const token = Cookies.get("token");
 // const router = useRouter();
+console.log("handler token", token);
 const user_token = {
   headers: {
     Authorization: `Bearer ${token}`,
@@ -22,9 +23,9 @@ export async function signOutHandler() {
 }
 
 export async function getNotes() {
-  "use client";
   try {
     const response = axios.get("http://localhost:4000/api/notes", user_token);
+    // console.log("The respone data is hear", (await response).data);
     return (await response).data;
   } catch (error) {
     if (error) throw error;

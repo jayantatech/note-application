@@ -16,7 +16,11 @@ const SignUp = () => {
   const handleSignUp = async (event: FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setError(null);
-    if (!name || !email || !password) setError("Enter your info");
+    if (!name || !email || !password) {
+      setError("Enter your info");
+      return null;
+    }
+
     try {
       const data = axios.post("http://localhost:4000/api/auth/signup", {
         name,

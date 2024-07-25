@@ -4,9 +4,9 @@ import NoteItem from "./NoteItem";
 import NoteEditor from "./NoteEditor";
 import NoteAdder from "./NoteAdder";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
 import axios from "axios";
 import { getNotes } from "@/app/handler/authHandler";
+import Cookies from "js-cookie";
 
 export type Note = {
   content?: string;
@@ -33,7 +33,6 @@ const NotesList = () => {
   if (!token) {
     router.push("/login");
   }
-
   const user_token = {
     headers: {
       Authorization: `Bearer ${token}`,
