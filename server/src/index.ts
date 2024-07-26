@@ -11,17 +11,25 @@ import csurf from "csurf";
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-const csrfProtection = csurf({ cookie: true });
+const csrfProtection = csurf({
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  },
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL!,
+    origin: "https://quicknotes-app-dev.vercel.app",
+    methods: ["GET", "POST"],
     credentials: true,
   })
 );
+
 app.use(csrfProtection);
 
 app.use("/api/auth", authRoutes);
