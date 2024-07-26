@@ -13,10 +13,10 @@ const Home = () => {
   useEffect(() => {
     const token = Cookies.get("token");
 
-    const initializeCsrfToken = async () => {
-      await fetchCsrfToken();
-    };
-    initializeCsrfToken();
+    // const initializeCsrfToken = async () => {
+    //   await fetchCsrfToken();
+    // };
+    // initializeCsrfToken();
     if (!token) {
       router.push("/login");
     } else {
