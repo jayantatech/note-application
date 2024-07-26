@@ -45,7 +45,6 @@ const Login = () => {
       });
       router.push("/");
     } catch (error: any) {
-      console.error("Error fetching data:", error);
       setError("Login failed");
     }
   };

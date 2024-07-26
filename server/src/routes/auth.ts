@@ -36,7 +36,7 @@ router.post("/login", async (req: Request, res: Response) => {
     if (error) {
       return res.status(500).json({ message: "something went wrong", error });
     }
-
+    if (!data.user) return res.json({ message: "no user found" });
     const { data: dbData, error: dbError } = await supabase
       .from("Users")
       .select("*")
@@ -69,10 +69,14 @@ router.post("/signup", async (req: Request, res: Response) => {
     const password = sanitizeInput(req.body.password);
     const name = sanitizeInput(req.body.name);
     const role = sanitizeInput(req.body.role);
-    const { data, error } = await supabaseAdmin.auth.admin.createUser({
+    // const { data, error } = await supabaseAdmin.auth.admin.createUser({
+    //   email,
+    //   password,
+    //   email_confirm: true,
+    // });
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      email_confirm: true,
     });
 
     if (error) {

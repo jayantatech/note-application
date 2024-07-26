@@ -81,7 +81,7 @@ const NotesList = () => {
         handleNotes();
       }
     } catch (error) {
-      console.error("The error is hear", error); // Log the entire error object
+      console.error("The error is hear", error);
     }
     setSelectedNote(null);
     setIsEditing(false);
