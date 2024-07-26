@@ -1,5 +1,4 @@
 import { NextFunction, request, Request, Response, Router } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
 import { verifyToken } from "../middleware";
 import { ExtendedRequest } from "../extended-request";
 import supabase from "../supabaseConnection";
@@ -11,7 +10,7 @@ interface Note {
   title: string;
   content: string;
   user_id: string;
-  updated_at?: string | null; // Adjust data type as needed
+  updated_at?: string | null;
 }
 router.post("/", verifyToken, async (req: ExtendedRequest, res: Response) => {
   const title = sanitizeInput(req.body.title);

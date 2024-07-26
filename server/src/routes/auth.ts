@@ -3,11 +3,9 @@ import { Request, Response, Router } from "express";
 import jwt from "jsonwebtoken";
 import { verifyToken } from "../middleware";
 import { ExtendedRequest } from "../extended-request";
-import csurf from "csurf";
 import { sanitizeInput } from "../utils/sanitizer";
 
 const router = Router();
-// const csrfProtection = csurf({ cookie: true });
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY!;
@@ -47,13 +45,11 @@ router.post("/login", async (req: Request, res: Response) => {
     if (dbError) {
       return res.status(500).json({ message: "something went wrong", dbError });
     }
-    // const token = data.session.access_token;
     if (!dbData) throw error;
     const user_Id = data.user?.id;
     const user_role = dbData[0].role;
     const user_name = dbData[0].name;
     const token = generateToken(user_Id!, user_role, user_name);
-    // res.cookie("token", token, { httpOnly: true, secure: true });
 
     res.status(200).json({
       token,

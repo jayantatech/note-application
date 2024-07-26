@@ -1,11 +1,8 @@
 "use client";
 import axios from "axios";
-import { error } from "console";
 import { useRouter } from "next/navigation";
-import { FormEvent, FormEventHandler, useEffect, useState } from "react";
-import { setEmitFlags } from "typescript";
-// import { signup } from "./actions";
-import Cookies from "js-cookie";
+import { FormEvent, useEffect, useState } from "react";
+import { fetchCsrfToken } from "@/utils/csrf";
 
 const SignUp = () => {
   const router = useRouter();
@@ -13,6 +10,16 @@ const SignUp = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [csrfToken, setCsrfToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const getCsrfToken = async () => {
+      const token = await fetchCsrfToken();
+      setCsrfToken(token);
+    };
+
+    getCsrfToken();
+  }, []);
 
   const handleSignUp = async (event: FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -23,16 +30,27 @@ const SignUp = () => {
     }
 
     try {
-      const data = axios.post("http://localhost:4000/api/auth/signup", {
-        name,
-        email,
-        password,
-        role: "user",
-      });
+      const { data } = await axios.post(
+        "http://localhost:4000/api/auth/signup",
+        {
+          name,
+          email,
+          password,
+          role: "user",
+        },
+        {
+          headers: {
+            "X-CSRF-Token": csrfToken || "",
+          },
+          withCredentials: true,
+        }
+      );
       setName("");
       setEmail("");
       setPassword("");
-      return data;
+      if (data.user) {
+        router.push("/login");
+      }
     } catch (error: any) {
       console.error("Error fetching data:", error);
       setError("Registration failed");
@@ -48,7 +66,7 @@ const SignUp = () => {
         <form className="mt-8 space-y-6">
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="email" className="hidden">
+              <label htmlFor="name" className="hidden">
                 Full name
               </label>
               <input
@@ -119,7 +137,7 @@ const SignUp = () => {
           </div>
           <div>
             <button
-              // type="submit"
+              type="submit"
               className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md group hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               onClick={(event) => handleSignUp(event)}
             >
