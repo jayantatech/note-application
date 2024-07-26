@@ -2,9 +2,10 @@
 import axios from "axios";
 import { error } from "console";
 import { useRouter } from "next/navigation";
-import { FormEvent, FormEventHandler, useState } from "react";
+import { FormEvent, FormEventHandler, useEffect, useState } from "react";
 import { setEmitFlags } from "typescript";
 // import { signup } from "./actions";
+import Cookies from "js-cookie";
 
 const SignUp = () => {
   const router = useRouter();
@@ -37,6 +38,7 @@ const SignUp = () => {
       setError("Registration failed");
     }
   };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">

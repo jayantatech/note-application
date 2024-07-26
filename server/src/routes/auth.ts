@@ -3,8 +3,8 @@ import { Request, Response, Router } from "express";
 import jwt from "jsonwebtoken";
 import { verifyToken } from "../middleware";
 import { ExtendedRequest } from "../extended-request";
-import { sanitizeInput } from "../utils/sanitizer";
 import csurf from "csurf";
+import { sanitizeInput } from "../utils/sanitizer";
 
 const router = Router();
 // const csrfProtection = csurf({ cookie: true });
@@ -115,4 +115,20 @@ router.post(
     }
   }
 );
+
+router.get("/session", (req: Request, res: Response) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ message: "No token provided" });
+  try {
+    const decode = jwt.verify(token, SUPABASE_JWT_SECRET) as {
+      userId: string;
+      role: string;
+      name: string;
+    };
+    res.status(200).json({ data: decode, message: "session is ok" });
+  } catch (error) {
+    res.status(401).json({ message: "Invalid token" });
+  }
+});
+
 export default router;

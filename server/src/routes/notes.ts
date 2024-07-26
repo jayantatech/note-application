@@ -4,6 +4,7 @@ import { verifyToken } from "../middleware";
 import { ExtendedRequest } from "../extended-request";
 import supabase from "../supabaseConnection";
 import { sanitizeInput } from "../utils/sanitizer";
+
 const router = Router();
 interface Note {
   id?: number;
@@ -24,6 +25,7 @@ router.post("/", verifyToken, async (req: ExtendedRequest, res: Response) => {
   if (error) {
     return res.json(500).json({ message: "something went wrong", error });
   }
+  res.status(200).json({ message: "post saved", data });
 });
 
 router.get("/", verifyToken, async (req: ExtendedRequest, res: Response) => {
