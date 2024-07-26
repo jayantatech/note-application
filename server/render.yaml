@@ -1,9 +1,22 @@
 services:
   - type: web
-    name: note-app
-    env: node
+    name: note-application
+    runtime: node
+    repo: https://github.com/jayantatech/note-application
     plan: free
+    envVars:
+      - key: SUPABASE_JWT_SECRET
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: PORT
+        sync: false
+    region: oregon
     buildCommand: npm install
     startCommand: npm start
-    branches:
-      - main
+    rootDir: ./server
+version: "1"
