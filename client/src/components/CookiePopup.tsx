@@ -7,9 +7,12 @@ const CookiePopup = () => {
   useEffect(() => {
     const checkThirdPartyCookies = async () => {
       try {
-        await fetch("/api/check-third-party-cookies", {
-          credentials: "include",
-        });
+        await fetch(
+          "https://note-application-bbc9.onrender.com/api/check-third-party-cookies",
+          {
+            credentials: "include",
+          }
+        );
         setIsVisible(false);
       } catch {
         setIsVisible(true);
