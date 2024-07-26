@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const fetchCsrfToken = async (): Promise<string> => {
+export const fetchCsrfToken = async () => {
   try {
     const response = await axios.get(
       "https://note-application-bbc9.onrender.com/api/csrf-token",
@@ -11,6 +11,6 @@ export const fetchCsrfToken = async (): Promise<string> => {
     return response.data.csrfToken;
   } catch (error) {
     console.error("Failed to fetch CSRF token:", error);
-    throw error;
+    return null;
   }
 };

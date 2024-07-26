@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://quicknotes-app-dev.vercel.app",
+    origin: process.env.FRONTEND_URL!,
     methods: ["GET", "POST"],
     credentials: true,
   })
