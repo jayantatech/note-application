@@ -4,6 +4,7 @@ import NotesList from "@/components/NotesList";
 import Sidebar from "@/components/Sidebar";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { fetchCsrfToken } from "@/utils/csrf";
 
 const Home = () => {
   const router = useRouter();
@@ -11,6 +12,11 @@ const Home = () => {
 
   useEffect(() => {
     const token = Cookies.get("token");
+
+    const initializeCsrfToken = async () => {
+      await fetchCsrfToken();
+    };
+    initializeCsrfToken();
     if (!token) {
       router.push("/login");
     } else {
