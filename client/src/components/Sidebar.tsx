@@ -30,7 +30,7 @@ const Sidebar = () => {
   const logout = async () => {
     try {
       const response = axios.post(
-        "http://localhost:4000/api/auth/signout",
+        "https://note-application-bbc9.onrender.com/api/auth/signout",
         {},
         user_token
       );

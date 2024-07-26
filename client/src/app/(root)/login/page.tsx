@@ -27,7 +27,7 @@ const Login = () => {
     setError(null);
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/auth/login",
+        "https://note-application-bbc9.onrender.com/api/auth/login",
         { email, password },
         {
           headers: {
@@ -97,7 +97,7 @@ const Login = () => {
           </div>
           <div>
             <p className="mt-2 text-center text-sm text-gray-600">
-              Don&apos;t have an account?{" "}
+              Don't have an account?{" "}
               <span
                 onClick={() => router.push("/sign-up")}
                 className="font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer"

@@ -31,7 +31,7 @@ const SignUp = () => {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/auth/signup",
+        "https://note-application-bbc9.onrender.com/api/auth/signup",
         {
           name,
           email,
