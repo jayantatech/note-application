@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import NoteItem from "./NoteItem";
 import NoteEditor from "./NoteEditor";
 import NoteAdder from "./NoteAdder";
@@ -42,14 +42,17 @@ const NotesList = () => {
   if (!token) {
     router.push("/login");
   }
-  const user_token = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "X-CSRF-Token": csrfToken || "",
-    },
-    withCredentials: true,
-  };
-  const handleNotes = async () => {
+  const user_token = useMemo(
+    () => ({
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "X-CSRF-Token": csrfToken || "",
+      },
+      withCredentials: true,
+    }),
+    [token, csrfToken]
+  );
+  const handleNotes = useCallback(async () => {
     try {
       const response = await axios.get(
         "http://localhost:4000/api/notes",
@@ -59,7 +62,8 @@ const NotesList = () => {
     } catch (error) {
       console.error("Error fetching notes:", error);
     }
-  };
+  }, [user_token]);
+
   useEffect(() => {
     handleNotes();
   }, [csrfToken, handleNotes]);
