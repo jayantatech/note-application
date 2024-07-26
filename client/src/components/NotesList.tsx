@@ -62,7 +62,7 @@ const NotesList = () => {
   };
   useEffect(() => {
     handleNotes();
-  }, [csrfToken]);
+  }, [csrfToken, handleNotes]);
 
   const handleEditSave = async (updatedNote: Note) => {
     const updatedData = {
