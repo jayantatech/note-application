@@ -10,7 +10,7 @@ const user_token = {
 
 export async function signOutHandler() {
   const response = axios.post(
-    "https://note-application-bbc9.onrender.com/api/auth/signout",
+    "https://note-application-w8jn.onrender.com/api/auth/signout",
     {},
     user_token
   );
@@ -23,7 +23,7 @@ export async function signOutHandler() {
 export async function getNotes() {
   try {
     const response = axios.get(
-      "https://note-application-bbc9.onrender.com/api/notes",
+      "https://note-application-w8jn.onrender.com/api/notes",
       user_token
     );
     return (await response).data;

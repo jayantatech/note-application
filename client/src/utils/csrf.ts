@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 export const fetchCsrfToken = async () => {
   try {
     const response = await axios.get(
-      "https://note-application-bbc9.onrender.com/api/csrf-token",
+      "https://note-application-w8jn.onrender.com/api/csrf-token",
       {
         withCredentials: true,
       }

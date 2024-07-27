@@ -55,7 +55,7 @@ const NotesList = () => {
   const handleNotes = useCallback(async () => {
     try {
       const response = await axios.get(
-        "https://note-application-bbc9.onrender.com/api/notes",
+        "https://note-application-w8jn.onrender.com/api/notes",
         user_token
       );
       setNotes(response.data);
@@ -77,7 +77,7 @@ const NotesList = () => {
     const postId = updatedNote?.id;
     try {
       const response = axios.put(
-        `https://note-application-bbc9.onrender.com/api/notes/update/${postId}/`,
+        `https://note-application-w8jn.onrender.com/api/notes/update/${postId}/`,
         updatedData,
         user_token
       );
@@ -94,7 +94,7 @@ const NotesList = () => {
   const handleAddSave = async (newNote: Note) => {
     try {
       const response = axios.post(
-        "https://note-application-bbc9.onrender.com/api/notes",
+        "https://note-application-w8jn.onrender.com/api/notes",
         { title: newNote.title, content: newNote.content },
         user_token
       );
@@ -109,7 +109,7 @@ const NotesList = () => {
   const handleonDelete = async (noteId: string) => {
     try {
       const response = axios.delete(
-        `https://note-application-bbc9.onrender.com/api/notes/remove/${noteId}`,
+        `https://note-application-w8jn.onrender.com/api/notes/remove/${noteId}`,
         user_token
       );
       if ((await response).data) {

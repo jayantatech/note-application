@@ -27,7 +27,7 @@ const Login = () => {
     setError(null);
     try {
       const response = await axios.post(
-        "https://note-application-bbc9.onrender.com/api/auth/login",
+        "https://note-application-w8jn.onrender.com/api/auth/login",
         { email, password },
         {
           headers: {
