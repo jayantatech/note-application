@@ -3,26 +3,26 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { fetchCsrfToken } from "@/utils/csrf";
+// import { fetchCsrfToken } from "@/utils/csrf";
 import Link from "next/link";
 const Sidebar = () => {
-  const [csrfToken, setCsrfToken] = useState<string | null>(null);
+  // const [csrfToken, setCsrfToken] = useState<string | null>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    const getCsrfToken = async () => {
-      const token = await fetchCsrfToken();
-      setCsrfToken(token);
-    };
+  // useEffect(() => {
+  //   const getCsrfToken = async () => {
+  //     const token = await fetchCsrfToken();
+  //     setCsrfToken(token);
+  //   };
 
-    getCsrfToken();
-  }, []);
+  //   getCsrfToken();
+  // }, []);
 
   const token = Cookies.get("token");
   const user_token = {
     headers: {
       Authorization: `Bearer ${token}`,
-      "X-CSRF-Token": csrfToken || "",
+      // "X-CSRF-Token": csrfToken || "",
     },
     withCredentials: true,
   };

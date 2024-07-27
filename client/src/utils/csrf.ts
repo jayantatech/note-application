@@ -9,11 +9,6 @@ export const fetchCsrfToken = async () => {
         withCredentials: true,
       }
     );
-    Cookies.set("XSRF-TOKEN", response.data.csrfToken, {
-      expires: 1,
-      secure: true,
-      sameSite: "strict",
-    });
     return response.data.csrfToken;
   } catch (error) {
     console.error("Failed to fetch CSRF token:", error);

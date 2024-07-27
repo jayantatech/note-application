@@ -6,7 +6,7 @@ import NoteAdder from "./NoteAdder";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { fetchCsrfToken } from "@/utils/csrf";
+// import { fetchCsrfToken } from "@/utils/csrf";
 
 export type Note = {
   content?: string;
@@ -26,18 +26,18 @@ const NotesList = () => {
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isAdding, setIsAdding] = useState<null | boolean>();
-  const [csrfToken, setCsrfToken] = useState<string | null>(null);
+  // const [csrfToken, setCsrfToken] = useState<string | null>(null);
 
   const router = useRouter();
   const token = Cookies.get("token");
-  useEffect(() => {
-    const getCsrfToken = async () => {
-      const token = await fetchCsrfToken();
-      setCsrfToken(token);
-    };
+  // useEffect(() => {
+  //   const getCsrfToken = async () => {
+  //     const token = await fetchCsrfToken();
+  //     setCsrfToken(token);
+  //   };
 
-    getCsrfToken();
-  }, []);
+  //   getCsrfToken();
+  // }, []);
 
   if (!token) {
     router.push("/login");
@@ -46,12 +46,22 @@ const NotesList = () => {
     () => ({
       headers: {
         Authorization: `Bearer ${token}`,
-        "X-CSRF-Token": csrfToken || "",
+        // "X-CSRF-Token": csrfToken || "",
       },
       withCredentials: true,
     }),
-    [token, csrfToken]
+    [token]
   );
+  // const user_token = useMemo(
+  //   () => ({
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //       // "X-CSRF-Token": csrfToken || "",
+  //     },
+  //     withCredentials: true,
+  //   }),
+  //   [token, csrfToken]
+  // );
   const handleNotes = useCallback(async () => {
     try {
       const response = await axios.get(
@@ -66,7 +76,10 @@ const NotesList = () => {
 
   useEffect(() => {
     handleNotes();
-  }, [csrfToken, handleNotes]);
+  }, [handleNotes]);
+  // useEffect(() => {
+  //   handleNotes();
+  // }, [csrfToken, handleNotes]);
 
   const handleEditSave = async (updatedNote: Note) => {
     const updatedData = {

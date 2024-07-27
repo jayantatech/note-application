@@ -9,18 +9,18 @@ const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const [csrfToken, setCsrfToken] = useState<string | null>(null);
+  // const [csrfToken, setCsrfToken] = useState<string | null>(null);
 
   const router = useRouter();
 
-  useEffect(() => {
-    const getCsrfToken = async () => {
-      const token = await fetchCsrfToken();
-      setCsrfToken(token);
-    };
+  // useEffect(() => {
+  //   const getCsrfToken = async () => {
+  //     const token = await fetchCsrfToken();
+  //     setCsrfToken(token);
+  //   };
 
-    getCsrfToken();
-  }, []);
+  //   getCsrfToken();
+  // }, []);
 
   const handleLogin = async (event: FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -28,13 +28,13 @@ const Login = () => {
     try {
       const response = await axios.post(
         "https://note-application-w8jn.onrender.com/api/auth/login",
-        { email, password },
-        {
-          headers: {
-            "X-CSRF-Token": csrfToken || "",
-          },
-          withCredentials: true,
-        }
+        { email, password }
+        // {
+        // headers: {
+        //   "X-CSRF-Token": csrfToken || "",
+        // },
+        // withCredentials: true,
+        // }
       );
 
       const { token } = response.data;

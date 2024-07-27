@@ -11,13 +11,13 @@ import csrf from "csurf";
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-const csrfProtection = csrf({
-  cookie: {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-  },
-});
+// const csrfProtection = csrf({
+//   cookie: {
+//     httpOnly: true,
+//     secure: process.env.NODE_ENV === "production",
+//     sameSite: "strict",
+//   },
+// });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,11 +30,11 @@ app.use(
   })
 );
 
-app.use(csrfProtection);
+// app.use(csrfProtection);
 
-app.get("/api/csrf-token", (req, res) => {
-  res.json({ csrfToken: req.csrfToken() });
-});
+// app.get("/api/csrf-token", (req, res) => {
+//   res.json({ csrfToken: req.csrfToken() });
+// });
 
 app.use("/api/auth", authRoutes);
 app.use("/api/notes", noteRoutes);

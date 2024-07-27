@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
-import { fetchCsrfToken } from "@/utils/csrf";
+// import { fetchCsrfToken } from "@/utils/csrf";
 
 const SignUp = () => {
   const router = useRouter();
@@ -10,16 +10,16 @@ const SignUp = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const [csrfToken, setCsrfToken] = useState<string | null>(null);
+  // const [csrfToken, setCsrfToken] = useState<string | null>(null);
 
-  useEffect(() => {
-    const getCsrfToken = async () => {
-      const token = await fetchCsrfToken();
-      setCsrfToken(token);
-    };
+  // useEffect(() => {
+  //   const getCsrfToken = async () => {
+  //     const token = await fetchCsrfToken();
+  //     setCsrfToken(token);
+  //   };
 
-    getCsrfToken();
-  }, []);
+  //   getCsrfToken();
+  // }, []);
 
   const handleSignUp = async (event: FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -37,13 +37,13 @@ const SignUp = () => {
           email,
           password,
           role: "user",
-        },
-        {
-          headers: {
-            "X-CSRF-Token": csrfToken || "",
-          },
-          withCredentials: true,
         }
+        // {
+        //   headers: {
+        //     "X-CSRF-Token": csrfToken || "",
+        //   },
+        //   withCredentials: true,
+        // }
       );
       setName("");
       setEmail("");
