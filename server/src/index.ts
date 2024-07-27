@@ -24,7 +24,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL!,
+    origin: " http://localhost:3000",
+    // origin: process.env.FRONTEND_URL!,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -37,15 +38,6 @@ app.use("/api/notes", noteRoutes);
 
 app.get("/api/csrf-token", (req, res) => {
   res.json({ csrfToken: req.csrfToken() });
-});
-
-app.get("/api/check-third-party-cookies", (req, res) => {
-  res.cookie("third-party-test", "test", { sameSite: "none", secure: true });
-  if (req.cookies["third-party-test"]) {
-    res.status(200).send("Third-party cookies are enabled");
-  } else {
-    res.status(400).send("Third-party cookies are disabled");
-  }
 });
 
 app.listen(PORT, () => {
