@@ -15,7 +15,7 @@ const csrfProtection = csurf({
   cookie: {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "none",
+    sameSite: "strict",
   },
 });
 
@@ -31,13 +31,12 @@ app.use(
 );
 
 app.use(csrfProtection);
-
-app.use("/api/auth", authRoutes);
-app.use("/api/notes", noteRoutes);
-
 app.get("/api/csrf-token", (req, res) => {
   res.json({ csrfToken: req.csrfToken() });
 });
+
+app.use("/api/auth", authRoutes);
+app.use("/api/notes", noteRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
