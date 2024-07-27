@@ -6,14 +6,19 @@ import cors from "cors";
 import authRoutes from "./routes/auth";
 import noteRoutes from "./routes/notes";
 import cookieParser from "cookie-parser";
-import { doubleCsrf } from "csrf-csrf";
+import csrf from "csurf";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-const { doubleCsrfProtection, generateToken } = doubleCsrf({
-  getSecret: () => process.env.CSRF_SECRET!,
+const csrfProtection = csrf({
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  },
 });
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -24,11 +29,11 @@ app.use(
     credentials: true,
   })
 );
-app.use(doubleCsrfProtection);
+
+app.use(csrfProtection);
 
 app.get("/api/csrf-token", (req, res) => {
-  const csrfToken = generateToken(req, res);
-  res.json({ csrfToken });
+  res.json({ csrfToken: req.csrfToken() });
 });
 
 app.use("/api/auth", authRoutes);

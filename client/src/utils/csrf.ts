@@ -9,7 +9,7 @@ export const fetchCsrfToken = async () => {
         withCredentials: true,
       }
     );
-    Cookies.set("__Host-csrf-token", response.data.csrfToken, {
+    Cookies.set("XSRF-TOKEN", response.data.csrfToken, {
       expires: 1,
       secure: true,
       sameSite: "strict",
