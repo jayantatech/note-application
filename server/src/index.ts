@@ -1,24 +1,25 @@
 import dotenv from "dotenv";
 dotenv.config();
-import express from "express";
+import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import authRoutes from "./routes/auth";
 import noteRoutes from "./routes/notes";
 import cookieParser from "cookie-parser";
-import csurf from "csurf";
+// import csurf from "csurf";
+import { doubleCsrf } from "csrf-csrf";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-const csrfProtection = csurf({
-  cookie: {
-    httpOnly: true,
+const { doubleCsrfProtection, generateToken } = doubleCsrf({
+  getSecret: () => process.env.CSRF_SECRET!,
+  cookieName: "__Host-csrf-token",
+  cookieOptions: {
+    sameSite: "none",
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
   },
 });
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -29,10 +30,11 @@ app.use(
     credentials: true,
   })
 );
+app.use(doubleCsrfProtection);
 
-app.use(csrfProtection);
 app.get("/api/csrf-token", (req, res) => {
-  res.json({ csrfToken: req.csrfToken() });
+  const csrfToken = generateToken(req, res); // Generate CSRF token
+  res.json({ csrfToken }); // Send token to client
 });
 
 app.use("/api/auth", authRoutes);
